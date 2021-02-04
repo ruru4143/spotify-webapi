@@ -57,8 +57,20 @@ class SpotifyGeneric:
 
         return inner
 
-    def filter_metatags(self, propertys):
-        return filter(self.filter_property(propertys), self.metatags)
+    def get_metatag_content_of(self, propertys):
+        tags = list(filter(self.filter_property(propertys), self.metatags))
+        content = []
+        for tag in tags:
+            content.append(tag.attrs["content"])
+
+        if len(content) == 1:
+            return content[0]
+        else:
+            return content
+
+    @staticmethod
+    def get_content(tag):
+        return
 
     @staticmethod
     def get_webpage(url):
@@ -93,21 +105,18 @@ class Playlist(SpotifyGeneric):
     def init(self):
         super(Playlist, self).init()
 
-        self.title = self.filter_metatags("twitter:title")
-        self.image_url = self.filter_metatags("twitter:image" )
-        self.creator_url = self.filter_metatags("music:creator")
+        self.title = self.get_metatag_content_of("twitter:title")
+        self.image_url = self.get_metatag_content_of("twitter:image")
+        self.creator_url = self.get_metatag_content_of("music:creator")
 
         self.tracks = self.get_tracks()
 
     def get_tracks(self):
         tracks = []
-        for track_url_tag, track_counter_tag in pairwise(self.filter_metatags(["music:song:track", "music:song"])):
-            track_url = track_url_tag.attrs["content"]
-            track_nr = track_counter_tag.attrs["content"]
-            tracks.append((track_nr, Track(track_url)))
+        for track_url, track_counter in pairwise(self.get_metatag_content_of(["music:song:track", "music:song"])):
+            tracks.append(Track(track_url))
 
-            print(f"{track_nr}: {track_url}")
-            if track_nr == 50:
+            if track_counter == 50:
                 print("there are 50 or more tracks")
                 print("this libary can only parse the first 50 tracks of spotify")
 
@@ -125,18 +134,18 @@ class Track(SpotifyGeneric):
         super(Track, self).init()
 
         # track stuff
-        self.title = self.filter_metatags("twitter:title")
-        self.releasedate = self.filter_metatags("music:release_date")
-        self.duration = self.filter_metatags("music:duration")
+        self.title = self.get_metatag_content_of("twitter:title")
+        self.releasedate = self.get_metatag_content_of("music:release_date")
+        self.duration = self.get_metatag_content_of("music:duration")
 
         # artist stuff
-        self.artist = self.filter_metatags("twitter:audio:artist_name")
-        self.artist_url = self.filter_metatags("music:musician")
+        self.artist = self.get_metatag_content_of("twitter:audio:artist_name")
+        self.artist_url = self.get_metatag_content_of("music:musician")
 
         # album stuff
-        self.album_url = self.filter_metatags("music:album")
-        self.album_number = self.filter_metatags("music:album:track")
+        self.album_url = self.get_metatag_content_of("music:album")
+        self.album_number = self.get_metatag_content_of("music:album:track")
 
         # misc
-        self.image_url = self.filter_metatags("og:image")
-        self.audio_preview_url = self.filter_metatags("music:preview_url:secure_url")
+        self.image_url = self.get_metatag_content_of("og:image")
+        self.audio_preview_url = self.get_metatag_content_of("music:preview_url:secure_url")
