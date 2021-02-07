@@ -12,7 +12,7 @@ from setuptools import setup
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 DOWNLOAD_URL = (
     'https://github.com/ruru4143/spotify-webapi' + VERSION
 )
@@ -28,6 +28,7 @@ setup(
     description='get tracks of spotify playlists without using the official api',
     long_description=long_description,
     long_description_content_type="text/markdown",
+    install_requires=["beautifulsoup4"],
     download_url=DOWNLOAD_URL,
     keywords=[
         'spotify', 'track', 'scaping', 'webapi', 'webscraper',
