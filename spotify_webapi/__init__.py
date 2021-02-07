@@ -69,10 +69,6 @@ class SpotifyGeneric:
             return content
 
     @staticmethod
-    def get_content(tag):
-        return
-
-    @staticmethod
     def get_webpage(url):
         """
         :param url: url of the webpage
@@ -136,7 +132,7 @@ class Track(SpotifyGeneric):
         # track stuff
         self.title = self.get_metatag_content_of("twitter:title")
         self.releasedate = self.get_metatag_content_of("music:release_date")
-        self.duration = self.get_metatag_content_of("music:duration")
+        self.duration = int(self.get_metatag_content_of("music:duration"))
 
         # artist stuff
         self.artist = self.get_metatag_content_of("twitter:audio:artist_name")
@@ -144,7 +140,7 @@ class Track(SpotifyGeneric):
 
         # album stuff
         self.album_url = self.get_metatag_content_of("music:album")
-        self.album_number = self.get_metatag_content_of("music:album:track")
+        self.album_number = int(self.get_metatag_content_of("music:album:track")[1])
 
         # misc
         self.image_url = self.get_metatag_content_of("og:image")
