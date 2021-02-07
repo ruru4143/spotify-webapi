@@ -12,7 +12,7 @@ from setuptools import setup
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 DOWNLOAD_URL = (
     'https://github.com/ruru4143/spotify-webapi' + VERSION
 )

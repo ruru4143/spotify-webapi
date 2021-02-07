@@ -107,6 +107,12 @@ class Playlist(SpotifyGeneric):
 
         self.tracks = self.get_tracks()
 
+    def __repr__(self):
+        return f"Playlist({self.url})"
+
+    def __str__(self):
+        return self.title
+
     def get_tracks(self):
         tracks = []
         for track_url, track_counter in pairwise(self.get_metatag_content_of(["music:song:track", "music:song"])):
@@ -145,3 +151,10 @@ class Track(SpotifyGeneric):
         # misc
         self.image_url = self.get_metatag_content_of("og:image")
         self.audio_preview_url = self.get_metatag_content_of("music:preview_url:secure_url")
+
+
+    def __repr__(self):
+        return f"Track({self.url})"
+
+    def __str__(self):
+        return " - ".join(self.artist, self.title)
